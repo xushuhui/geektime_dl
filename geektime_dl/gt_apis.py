@@ -205,13 +205,21 @@ class GkApiClient(metaclass=Singleton):
 
         if not self._cookies and not self._no_login:
             self.reset_session()
-
-        resp = self._post(
-            url, {"aid": str(post_id), "prev": 0},
-            headers=headers, cookies=self._cookies
-        )
-
-        return resp.json()['data']['list']
+        arr = []
+        prev = 0
+        more = True
+        while more == True:
+            resp = self._post(
+                url, {"aid": str(post_id), "prev": prev},
+                headers=headers, cookies=self._cookies
+            )
+            data = resp.json()['data']
+            list = data['list']
+            arr.append(data['list'])
+            more = data['page']['more']
+            prev = list[len(list)-1]['score']
+            
+        return arr
 
     @_retry
     def get_video_collection_intro(self, collection_id: int) -> dict:
@@ -259,3 +267,5 @@ class GkApiClient(metaclass=Singleton):
         )
 
         return resp.json()['data']['list']
+if __name__=='__main__':
+    get_post_comments(320569)
