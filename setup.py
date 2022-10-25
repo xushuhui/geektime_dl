@@ -35,7 +35,7 @@ setup(
     package_data={'geektime_dl': ['ebook/templates/*']},
     install_requires=[
         'wheel',
-        'git+https://github.com/jachinlin/ebook-py.git',
+        'https://github.com/jachinlin/ebook-py.git',
         'requests',
         'termcolor',
         'tqdm',
